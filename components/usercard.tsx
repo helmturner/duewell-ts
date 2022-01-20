@@ -1,29 +1,34 @@
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useUser } from "@auth0/nextjs-auth0"
 import { Box, Menu, Button, Image } from "grommet"
 import * as Icons from "grommet-icons"
 
-type menuItems = { label: string, onClick?: any}
+type menuItems = { label: string, onClick?: any, href?: string}
 
 export default function UserCard() {
-  const { data: session, status } = useSession()
+  const { user, error, isLoading } = useUser()
   let menuItems: menuItems[] = []
   let cardLabel
 
-  if (status === "authenticated") {
-      menuItems = [ { label: 'Settings' }, { label: 'Logout', onClick: () => signOut() }, ...menuItems ]
-      if (session?.user?.image && session?.user?.name) {
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
+  if (user) {
+    menuItems = [ { label: 'Settings' }, { label: 'Logout', href: "/api/auth/logout" }, ...menuItems ]
+      if (user.picture && user.name) {
         cardLabel = (
           <span>
-            {console.log(session.user)}
             <Image
               height={"25px"}
               width={"25px"}
               alt="User Avatar"
-              src={session.user.image}
-            />{" " + session.user.name}
-          </span>)
-      } else cardLabel = (<span><Icons.User />{" My Account"}</span>)
-  
+              src={user.picture}
+            />{" " + user.name}
+          </span>
+        )
+      } else {
+        cardLabel = (
+          <span><Icons.User />{" My Account"}</span>
+        )
+      }
     return (
       <Box
       align="center"
@@ -45,7 +50,7 @@ export default function UserCard() {
     >
       <Button
         label={cardLabel}
-        onClick={() => signIn()}
+        href="/api/auth/login"
       />
     </Box>
   )
