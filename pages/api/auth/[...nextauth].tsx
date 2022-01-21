@@ -1,7 +1,10 @@
-import NextAuth from "next-auth"
-import Auth0Provider from "next-auth/providers/auth0"
+import NextAuth from "next-auth";
+import EmailProvider from "next-auth/providers/email";
+import GitHubProvider from "next-auth/providers/github";
 
-//TODO: Move secrets to .env && finish config
+
+/*TODO: Move secrets to .env && add additional providers including:
+magic link, credentials (with Auth0 as auth server), google, apple, etc*/
 export default NextAuth({
   // Configure one or more authentication providers
   secret: "ktg5Iv1y1WYLmGI+hsxz43yAJzvtqhFbxXd0DgY+Phw=",
@@ -13,16 +16,20 @@ export default NextAuth({
     maxAge: 24 * 60 * 60, 
   },
   providers: [
-    Auth0Provider({
-      clientId: "B0CWuRtObFfi9rXQdrhkrLhwOUxI00pi",
-      clientSecret: "4zN0Pgmq38OBq6J8oNsc3L_c_DQ1AuCJmhxt-EzZ0nUdGe5Xvat_RbN8-CTMN7ay",
-      issuer: "https://dev-7aw1wy7g.us.auth0.com"
+    GitHubProvider({
+      clientId: "e6dc19b23bc07bd3b7c0",
+      clientSecret: "11f3a7c5433a78f4ac86876913c48785cb71e773",
     })
     // ...add more providers here
   ],
   callbacks: {
     async jwt({ token, account, isNewUser, profile, user }) {
-      if (account) {
+      console.log("Token: ", JSON.stringify(token));
+      console.log("Account: ", JSON.stringify(account));
+      console.log("Profile: ", JSON.stringify(profile));
+      console.log("User: ", JSON.stringify(user));
+      console.log("New?: ", JSON.stringify(isNewUser));
+/*       if (account) {
         token.account = {
           type: account.type,
           id: account.providerAccountId,
@@ -45,7 +52,7 @@ export default NextAuth({
           exp: profile.exp
         }
       }
-      console.log(JSON.stringify(token))
+      console.log(JSON.stringify(token)) */
       return token
     }
   }
