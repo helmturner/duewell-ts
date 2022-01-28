@@ -10,7 +10,7 @@
   "dependencies": {
     "grommet": "^2.20.0",
     "grommet-icons": "^4.7.0",
-    "next": "12.0.7",
+    "next": "^12.0.9",
     "next-auth": "^4.1.2",
     "nodemailer": "^6.7.2",
     "react": "17.0.2",
