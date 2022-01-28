@@ -1,4 +1,4 @@
-import { Button, Grommet, Header, Main, Box, Nav, RoutedButton } from 'grommet'
+import { Button, Grommet, Header, Main, Box, Nav } from 'grommet'
 import { ReactNode } from 'react'
 import * as Icons from 'grommet-icons'
 import UserCard from './usercard'
@@ -13,7 +13,7 @@ export default function Layout({ children }: {children: ReactNode}) {
       >
         <Button href='/' icon={<Icons.Home />} hoverIndicator />
         <Nav direction={'column'} background={'brand'} pad={'medium'} flex={true}>
-            <RoutedButton path="dashboard">Dashboard</RoutedButton>
+            <Button href="dashboard">Dashboard</Button>
         </Nav>
         <UserCard />
       </Header>
