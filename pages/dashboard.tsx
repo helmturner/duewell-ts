@@ -3,29 +3,32 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useSession } from 'next-auth/react'
-import { Box, Grid, Heading, Main } from 'grommet'
+import { Main, Heading } from 'grommet'
 
-const Home: NextPage = () => {
+const Dashboard: NextPage = () => {
   const { data: session, status } = useSession()
   if (status === "authenticated") {
     if (session) {
-      // TODO: Change favicon
+      //TODO: Change Favicon
       return (
         <>
           <Head>
-            <title>Home</title>
-            <meta name="home" content="My DueWell" />
+            <title>Dashboard</title>
+            <meta name="dashboard" content="User Dashboard" />
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
           <Main justify='center' align='center' margin='large' responsive={true}>
-            <Heading size="medium">
-              Welcome to <a href="https://nextjs.org">Next.js!</a>
+            <Heading>
+              Welcome, {session.user?.name || 'friend!'}
             </Heading>
 
-            <Box
-              gap="small"
-            >
+            <p className={styles.description}>
+              {"SESSION: " + JSON.stringify(session) + " "}Get started by editing{' '}
+              <code className={styles.code}>pages/index.tsx</code>
+            </p>
+
+            <div className={styles.grid}>
               <a href="https://nextjs.org/docs" className={styles.card}>
                 <h2>Documentation &rarr;</h2>
                 <p>Find in-depth information about Next.js features and API.</p>
@@ -53,7 +56,7 @@ const Home: NextPage = () => {
                   Instantly deploy your Next.js site to a public URL with Vercel.
                 </p>
               </a>
-            </Box>
+            </div>
           </Main>
 
           <footer className={styles.footer}>
@@ -74,4 +77,4 @@ const Home: NextPage = () => {
   } else return null //FIXME
 }
 
-export default Home
+export default Dashboard
