@@ -1,12 +1,14 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import { useSession } from 'next-auth/react'
-import { Main, Heading } from 'grommet'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { useSession } from "next-auth/react";
+import { Main, Heading, Spinner, Box } from "grommet";
+import RecordEditor from "../components/recordEditor";
 
 const Dashboard: NextPage = () => {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
+
   if (status === "authenticated") {
     if (session) {
       //TODO: Change Favicon
@@ -18,14 +20,20 @@ const Dashboard: NextPage = () => {
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
-          <Main justify='center' align='center' margin='large' responsive={true}>
-            <Heading>
-              Welcome, {session.user?.name || 'friend!'}
-            </Heading>
+          <Main
+            justify="center"
+            align="center"
+            margin="large"
+            responsive={true}
+          >
+            <Heading>Welcome, {session.user?.name || "friend!"}</Heading>
+
+            <RecordEditor />
 
             <p className={styles.description}>
-              {"SESSION: " + JSON.stringify(session) + " "}Get started by editing{' '}
-              <code className={styles.code}>pages/index.tsx</code>
+              {/*DEBUG: stringify session on page during dev*/}
+              {"SESSION: " + JSON.stringify(session) + " "}Get started by
+              editing <code className={styles.code}>pages/index.tsx</code>
             </p>
 
             <div className={styles.grid}>
@@ -36,7 +44,9 @@ const Dashboard: NextPage = () => {
 
               <a href="https://nextjs.org/learn" className={styles.card}>
                 <h2>Learn &rarr;</h2>
-                <p>Learn about Next.js in an interactive course with quizzes!</p>
+                <p>
+                  Learn about Next.js in an interactive course with quizzes!
+                </p>
               </a>
 
               <a
@@ -53,7 +63,8 @@ const Dashboard: NextPage = () => {
               >
                 <h2>Deploy &rarr;</h2>
                 <p>
-                  Instantly deploy your Next.js site to a public URL with Vercel.
+                  Instantly deploy your Next.js site to a public URL with
+                  Vercel.
                 </p>
               </a>
             </div>
@@ -65,16 +76,26 @@ const Dashboard: NextPage = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Powered by{' '}
+              Powered by{" "}
               <span className={styles.logo}>
-                <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+                <Image
+                  src="/vercel.svg"
+                  alt="Vercel Logo"
+                  width={72}
+                  height={16}
+                />
               </span>
             </a>
           </footer>
         </>
-      )
-    } else throw new ReferenceError("No Session Found") //FIXME
-  } else return null //FIXME
-}
+      );
+    } else throw new ReferenceError("No Session Found"); //FIXME
+  } else
+    return (
+      <Box align="center">
+        <Spinner size="xlarge" />
+      </Box>
+    ); //FIXME
+};
 
-export default Dashboard
+export default Dashboard;
