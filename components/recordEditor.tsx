@@ -7,27 +7,17 @@ import {
   Form,
   FormField,
 } from "grommet";
-import { ReactElement, useState } from "react";
-import { useSession } from "next-auth/react";
-import { Account, Session, User } from "next-auth";
-import Error from "next/error";
-
-type ExtendedSession = Session & {
-  user: User;
-  account: Account & { id: string };
-};
+import {  useState } from "react";
+import type { ReactElement } from "react";
+import { apiBase } from '../constants'
 
 export default function RecordEditor() {
   let [shown, setShown] = useState(false);
   let [busy, setBusy] = useState(false);
-  const { data: session, status } = useSession();
-
-  let AdderForm = ({ session }: { session: ExtendedSession }): ReactElement => {
+  
+  let AdderForm = (): ReactElement => {
     const [value, setValue] = useState({} as Record<string, any>);
-    //FIXME return 401 error if session expired (does not work here)
-    return Date.parse(session.expires) <= Date.now() ? (
-      <Error statusCode={401} />
-    ) : (
+    return (
       <Form
         value={value}
         onChange={(nextValue) => setValue(nextValue)}
@@ -38,16 +28,10 @@ export default function RecordEditor() {
               let method = "POST";
               let headers = new Headers();
               let body = new FormData();
-
-              let user = session.user as User & Account;
-              let authHeader = `${user.tokenType + " " + user.accessToken}`;
-
-              headers.append("Authorization", authHeader);
-
-              body.append("userid", session.account.id);
+//            TODO: headers.append();
               body.append("file", file, file.name);
 
-              fetch("api/records", { method, headers, body });
+              fetch(`${apiBase}/records`, { method, headers, body });
             });
           }
           event.preventDefault();
@@ -78,10 +62,8 @@ export default function RecordEditor() {
       >
         {busy ? (
           <Spinner />
-        ) : status === "authenticated" && session ? (
-          <AdderForm session={session as ExtendedSession} />
         ) : (
-          <Error statusCode={401} />
+          <AdderForm />
         )}
       </Layer>
     ) : null;
