@@ -41,7 +41,6 @@ export default function RecordEditor() {
         <FormField
           label="Upload Receipts"
           id="fileInput"
-          onChange={(event) => setValue({fileInput: event.target.files})}
           component={FileInput}
           name="fileInput"
           multiple={true}
