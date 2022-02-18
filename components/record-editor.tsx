@@ -7,11 +7,12 @@ import {
   Form,
   FormField,
 } from "grommet";
-import {  useState } from "react";
+import {  useContext, useState } from "react";
 import type { ReactElement } from "react";
-import { apiBase } from '../constants'
+import GlobalContext from '../context/global'
 
 export default function RecordEditor() {
+  const { apiBase } = useContext(GlobalContext)
   let [shown, setShown] = useState(false);
   let [busy, setBusy] = useState(false);
   
@@ -31,7 +32,7 @@ export default function RecordEditor() {
 //            TODO: headers.append();
               body.append("file", file, file.name);
 
-              fetch(`${apiBase}/records`, { method, headers, body });
+              fetch(`${apiBase}/receipts`, { method, headers, body });
             });
           }
           event.preventDefault();
@@ -40,7 +41,7 @@ export default function RecordEditor() {
         <FormField
           label="Upload Receipts"
           id="fileInput"
-          //onChange={() => setValue({fileInput: event.target.files})}
+          onChange={(event) => setValue({fileInput: event.target.files})}
           component={FileInput}
           name="fileInput"
           multiple={true}

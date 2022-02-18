@@ -1,1 +1,0 @@
-export const apiBase: string = 'http://localhost:3030'
