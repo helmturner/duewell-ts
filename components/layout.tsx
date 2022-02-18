@@ -1,23 +1,24 @@
-import { Button, Grommet, Header, Main, Box, Nav } from 'grommet'
+import { Grommet, Main, Box} from 'grommet'
 import { ReactNode } from 'react'
-import * as Icons from 'grommet-icons'
+import { GlobalProvider } from '../context/global'
+import { PlaidProvider } from '../context/plaid'
+import DefaultHeader from './header'
 
-export default function Layout({ children }: {children: ReactNode}) {
+const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <Grommet plain>
-      <Header
-        justify="between"
-        margin="none"
-        background="brand"
-      >
-        <Button href='/' icon={<Icons.Home />} hoverIndicator />
-        <Nav direction={'column'} background={'brand'} pad={'medium'} flex={true}>
-            <Button href="dashboard">Dashboard</Button>
-        </Nav>
-      </Header>
-      <Main>
-        <Box width={"100%"} background="light-2">{children}</Box>
-      </Main>
-    </Grommet>
+    <GlobalProvider>
+      <PlaidProvider>
+        <Grommet plain>
+          <DefaultHeader />
+          <Main>
+            <Box width={"100%"} background="light-2">
+              {children}
+            </Box>
+          </Main>
+        </Grommet>
+      </PlaidProvider>
+    </GlobalProvider>
   )
-} 
+}
+
+export default Layout
