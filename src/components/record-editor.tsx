@@ -7,12 +7,12 @@ import {
   Form,
   FormField,
 } from "grommet";
-import {  useContext, useState } from "react";
+import {  useState } from "react";
 import type { ReactElement } from "react";
-import GlobalContext from '../context/global'
+
+const apiBase = process.env.API_BASE
 
 export default function RecordEditor() {
-  const { apiBase } = useContext(GlobalContext)
   let [shown, setShown] = useState(false);
   let [busy, setBusy] = useState(false);
   

@@ -1,0 +1,1 @@
+export { getPlaidLinkToken } from './getPlaidLinkToken'
