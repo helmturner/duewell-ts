@@ -1,6 +1,5 @@
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { fromJson } from "@auth0/nextjs-auth0/dist/session";
 
 const externalApiBaseUrl = process.env.EXTERNAL_API_BASE;
 
@@ -24,7 +23,7 @@ const handler: Record<string, NextApiHandler> = {
   trace: teapot,
   post: async (req, res) => {
     try {
-      const session = fromJson(getSession(req, res)!);
+      const session = getSession(req, res);
 
       if (
         !session ||
@@ -80,18 +79,19 @@ const handler: Record<string, NextApiHandler> = {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...req.body, user_id: session.user.sub }),
+            body: JSON.stringify({ ...req.body, user_id: user.sub }),
           }
         );
         const transactions = await apiResponse.json();
         res.status(apiResponse.status || 200).json(transactions);
       }
+      else {
+        res.status(tokenResponse.status)
+        .send(tokenResponse.body || tokenResponse.statusText)
+      }
     } catch (error: any) {
       console.error(error);
-      res.status(error.status || 500).json({
-        code: error.code,
-        error: error.message,
-      });
+      res.status(error.status || 502).send(error.message);
     }
   },
 };

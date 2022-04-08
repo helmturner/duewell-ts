@@ -1,9 +1,11 @@
 export type {
+  LinkTokenQuery,
   LinkTokenQueryFunction,
-  LinkTokenQueryKey,
   LinkTokenQueryOptions,
   TransactionFilter,
   TransactionQueryFunction,
   TransactionQueryKey,
   TransactionQueryOptions,
 } from "./queries";
+
+export type { ItemCreateFunction } from "./mutations"

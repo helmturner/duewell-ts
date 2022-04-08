@@ -46,7 +46,7 @@ const handler: Record<string, NextApiHandler> = {
         refreshToken,
       } = session;
 
-      const { user_id, item_id } = req.body
+      const params = req.body
 
       console.info("user~", user);
       console.info("idToken~", idToken);
@@ -83,7 +83,7 @@ const handler: Record<string, NextApiHandler> = {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ user_id, item_id }),
+            body: JSON.stringify({ ...params, user_id: user.sub }),
           }
         )
 

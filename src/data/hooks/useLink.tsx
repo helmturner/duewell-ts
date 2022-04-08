@@ -1,86 +1,102 @@
-import { useUser } from "@auth0/nextjs-auth0";
-import { PlaidLinkError, usePlaidLink } from "react-plaid-link";
-import { useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
-import { getPlaidLinkToken } from 'data/queries'
+import { usePlaidLink } from "react-plaid-link";
+import { useQuery } from "react-query";
+import { useItems } from "data/hooks";
 
-import type { LinkTokenQueryOptions, LinkTokenQueryKey } from 'data/types'
-
+import type { PlaidLinkError } from "react-plaid-link";
+import type {
+  LinkTokenQuery,
+  LinkTokenQueryOptions,
+  LinkTokenQueryFunction,
+} from "data/types";
 /**
- * @description Wrapper for the `usePlaidLink` hook that manages Link state internally
- * @param item_id If supplied, launches Link in "update mode" for that item
+ * _Wrapper for the_ `usePlaidLink` _hook that manages Link state internally_
  * @param options Optional query configuration object
  * @returns an object with convenient methods for launching Plaid Link
  */
-export const useLink = (
-  item_id?: string | null,
-  options?: LinkTokenQueryOptions
-) => {
-  const [queryKey, setQueryKey] = useState<LinkTokenQueryKey>();
-  const [linkToken, setLinkToken] = useState<string | null>(null);
-  const [userError, setUserError] =
-    useState<ReturnType<typeof useUser>["error"]>();
+export const useLink = (options: LinkTokenQueryOptions = {}) => {
+  const [item_id, setItem_id] = useState<string | null>();
   const [linkError, setLinkError] = useState<PlaidLinkError>();
+  const items = useItems();
 
-  // call hooks from React-Query, Auth0, and PlaidLink, respectively
-  const queryClient = useQueryClient();
-  const userContext = useUser();
+  const query: LinkTokenQuery = useQuery({
+    queryKey: ["link-tokens", { item_id: undefined }],
+    queryFn: getPlaidLinkToken,
+    ...options,
+    staleTime: item_id ? time(30, "minutes") : time(4, "hours"),
+    enabled: typeof item_id !== "undefined",
+  });
+
   const { open, ready } = usePlaidLink({
-    token: linkToken,
+    token: query.data?.link_token ?? null,
     onSuccess: (public_token, metadata) => {
       if (item_id) {
-        // update mode
-        console.warn("UPDATE MODE NOT YET IMPLEMENTED")
+        // TODO: update mode
+        console.warn("UPDATE MODE NOT YET IMPLEMENTED");
       } else {
-        console.info("SUCCESS", metadata);
-        queryClient.removeQueries(queryKey);  
+        items.create(public_token, metadata);
       }
+      query.remove();
+      setItem_id(undefined);
     },
     onEvent: (eventName, metadata) => {
       console.info(`${eventName} EVENT`, metadata);
     },
     onExit: (error, metadata) => {
       console.info("EXIT", metadata);
-      setLinkToken(null);
       error && setLinkError(error);
+      setItem_id(undefined);
     },
   });
 
-  // update the queryKey when queryFn params change
-  useEffect(() => {
-    const { user } = userContext;
-    user?.sub && setQueryKey(["link_token", { user_id: user.sub, item_id }]);
-  }, [userContext, item_id]);
-
-  // set error state if a user error occurs
-  useEffect(() => {
-    const { error } = userContext;
-    error && setUserError(error);
-  }, [userContext]);
-
   // output errors to console if they occur
   useEffect(() => {
-    userError && console.error(userError);
+    query.error && console.error(query.error);
     linkError && console.error(linkError);
-  }, [userError, linkError]);
+  }, [linkError, query.error]);
 
-  // automatically launch link when `linkToken` is set and Link is ready
+  // open Link when `item_id` is not undefined (after fetching completes and Link is ready)
   useEffect(() => {
-    linkToken && ready && open();
-  }, [ready, open, linkToken]);
+    typeof item_id !== "undefined" && !query.isFetching && ready && open();
+  }, [ready, open, query.isFetching, item_id]);
 
   return {
-    launchLink: async () => {
-      const data = await queryClient.fetchQuery({
-        queryKey,
-        queryFn: getPlaidLinkToken,
-        ...options,
-        /*  https://plaid.com/docs/quickstart/glossary/#link-token
-            Link tokens expire after 4 hours
-            (or 30 minutes when used in "Update Mode") */
-        staleTime: item_id ? 30 * 60 * 1000 : 4 * 60 * 60 * 1000,
-      });
-      setLinkToken(data?.link_token ?? null);
-    },
+    createItemLink: () => setItem_id(null),
+    updateItemLink: (item_id: string) => setItem_id(item_id),
   };
 };
+/**
+ * _Retrieves a link-token from_ __Plaid__
+ * @param queryContext The context provided by react-query
+ * @returns an object containing the link-token and request id
+ */
+const getPlaidLinkToken: LinkTokenQueryFunction = async function (
+  queryContext
+) {
+  const params = queryContext.queryKey[1];
+
+  const response = await fetch("/api/plaid/link", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
+/**
+ * @param unit `hours` | `minutes` (defaults to 'minutes')
+ * @param count number to multiply by `unit`
+ * @returns `number` the specified unit (in milliseconds) multiplied by `count`
+ * */
+function time(count: number, unit: "hours" | `minutes`): number {
+  if (unit === "hours") return count * 3600000;
+  return count * 60000;
+}

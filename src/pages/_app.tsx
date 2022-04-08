@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider, Hydrate } from "react-query";
 import Toastify from "react-toastify";
 
-import type { AppProps } from "next/app"
+import type { AppProps } from "next/app";
 
 //TODO: resolution for eslint-plugin-react is temp workaround for https://github.com/yannickcr/eslint-plugin-react/issues/3215
 
@@ -27,15 +27,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <UserProvider>
+    <UserProvider>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </UserProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </Hydrate>
-    </QueryClientProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Hydrate>
+      </QueryClientProvider>
+    </UserProvider>
   );
 }
