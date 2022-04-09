@@ -1,5 +1,10 @@
 {
   "name": "duewell-ts",
+  "version": "1.0.0",
+  "author": {
+    "name": "Alec Helmturner",
+    "email": "alec@alecvision.com"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
