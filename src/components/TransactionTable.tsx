@@ -1,25 +1,21 @@
 import { DataTable, Heading, Text } from "grommet";
 import { useTransactions } from "data/hooks";
+import { useState } from "react";
+import { TransactionFilter } from "data/types/queries";
 
 const TableControls = () => {};
 
 export const TransactionTable = () => {
-  const { data: transactions } = useTransactions(
-    {},
-    {
-      staleTime: 1 * 60 * 1000,
-      refetchOnMount: true,
-      refetchInterval: 5 * 60 * 1000,
-    }
-  );
+  const [filter, setFilter] = useState<TransactionFilter>({})
+  const transactions = useTransactions({filter});
 
   const columns = Array.from(
-    transactions?.reduce(
+    transactions?.data?.reduce(
       (keys, tx) => new Set(...keys, ...Object.keys(tx)),
       new Set<string>()
     ) ?? []
   ).map((key) => ({
-    primary: key === "account_id",
+    primary: (key === "account_id"),
     property: key,
     header: <Text>{key.replace("_", " ")}</Text>,
   }));
@@ -32,10 +28,10 @@ export const TransactionTable = () => {
         margin="none"
         responsive={true}
       >
-        {transactions}
+        Transactions
       </Heading>
       {/*       <TableControls />*/}
-      <DataTable columns={columns} data={transactions}>
+      <DataTable columns={columns} data={transactions?.data}>
         <thead>
           <tr>
             <th>Name</th>
@@ -50,7 +46,7 @@ export const TransactionTable = () => {
           </tr>
         </thead>
         <tbody>
-          {transactions?.map((tx) => (
+          {transactions?.data?.map((tx) => (
             <tr key={tx.transaction_id}>
               <td>{tx.name}</td>
               <td>{tx.merchant_name}</td>

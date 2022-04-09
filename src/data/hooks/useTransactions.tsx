@@ -1,16 +1,8 @@
-import { useUser } from "@auth0/nextjs-auth0";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
+import type { TransactionQueryOptions, TransactionFilter, TransactionQueryFunction } from "data/types";
 
-import type {
-  TransactionFilter,
-  TransactionQueryFunction,
-  TransactionQueryKey,
-  TransactionQueryOptions,
-} from "data/types";
-
-//TODO: Update queryFn to accept params from queryKey
-export const getTransactions: TransactionQueryFunction = ({ queryKey }) => {
-  const { user_id, ...filters } = queryKey[1];
+export const getTransactions: TransactionQueryFunction = ({queryKey}) => {
+  const params = queryKey[1]
 
   return fetch(`/api/plaid/transactions`, {
     method: "POST",
@@ -18,7 +10,7 @@ export const getTransactions: TransactionQueryFunction = ({ queryKey }) => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(filters),
+    body: JSON.stringify(params),
   }).then((res) => {
     if (!res.ok) {
       throw new Error(`${res.status}: ${res.statusText}`);
@@ -27,23 +19,17 @@ export const getTransactions: TransactionQueryFunction = ({ queryKey }) => {
   });
 };
 
-export const useTransactions = (
-  filter?: TransactionFilter,
-  options?: TransactionQueryOptions
-) => {
-  const { user } = useUser();
+export const useTransactions = ({
+  filter = {},
+  options = {},
+}: {
+  filter?: Partial<TransactionFilter>;
+  options?: TransactionQueryOptions;
+}) => {
   const config = { staleTime: 5 * 60 * 1000, ...options };
-  const queryKey: TransactionQueryKey = [
-    "transactions",
-    {
-      user_id: user!.sub!,
-      ...filter,
-    },
-  ];
-
   return useQuery({
+    queryKey: ["transactions", filter],
     queryFn: getTransactions,
-    queryKey,
     ...config,
   });
 };
