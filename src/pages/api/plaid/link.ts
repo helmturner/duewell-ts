@@ -1,10 +1,8 @@
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { fromJson } from "@auth0/nextjs-auth0/dist/session";
-import { LinkTokenCreateRequest, LinkTokenCreateResponse } from "plaid";
-import { db, plaidClient, PLAID_COUNTRY_CODES, PLAID_PRODUCTS, PLAID_REDIRECT_URI } from "server/db";
-
-const externalApiBaseUrl = process.env.EXTERNAL_API_BASE;
+import { LinkTokenCreateRequest } from "plaid";
+import { db, plaidClient, PLAID_COUNTRY_CODES, PLAID_PRODUCTS, PLAID_REDIRECT_URI } from "db";
 
 const teapot: NextApiHandler = (_, res) => {
   res.status(418);

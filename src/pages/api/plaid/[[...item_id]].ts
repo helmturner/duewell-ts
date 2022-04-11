@@ -1,7 +1,7 @@
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { db, plaidClient } from "server/db";
-import { PlaidItemModel } from "server/db/types";
+import { db, plaidClient } from "db";
+import { PlaidItemModel } from "db/types";
 import {
   isValidItemStatus,
   sanitizeItems,

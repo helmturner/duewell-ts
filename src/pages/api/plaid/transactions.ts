@@ -1,6 +1,6 @@
 import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { db } from "server/db";
+import { db } from "db";
 import { sanitizeTransactions } from "server/utils";
 
 const teapot: NextApiHandler = (_, res) => {
