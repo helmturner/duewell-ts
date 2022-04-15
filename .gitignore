@@ -175,3 +175,4 @@ sketch
 !.yarn/versions
 
 # End of https://www.toptal.com/developers/gitignore/api/yarn,node,react,nextjs,dotenv
+tsconfig.json.new-client

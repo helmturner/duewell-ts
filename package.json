@@ -1,5 +1,10 @@
 {
   "name": "duewell-ts",
+  "version": "1.0.0",
+  "author": {
+    "name": "Alec Helmturner",
+    "email": "alec@alecvision.com"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -7,22 +12,34 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "resolutions": {
+    "eslint-plugin-react": "7.28.0"
+  },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^1.7.0",
     "grommet": "^2.20.0",
     "grommet-icons": "^4.7.0",
+    "lodash": "^4.17.21",
     "next": "^12.1.0",
+    "prop-types": "^15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-plaid-link": "^3.3.0",
+    "react-query": "^3.34.19",
+    "react-toastify": "^8.2.0",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
+    "@azure/ai-form-recognizer": "^4.0.0-beta.3",
     "@types/formidable": "^2.0.4",
+    "@types/lodash": "^4.14.180",
     "@types/node": "17.0.8",
     "@types/react": "17.0.38",
     "eslint": "8.6.0",
     "eslint-config-next": "12.0.7",
+    "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "typescript": "4.5.4"
+    "plaid": "^9.10.1",
+    "typescript": "^4.5.5"
   }
 }
