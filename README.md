@@ -1,34 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Duewell
 
-## Getting Started
+Though I had mastered JavaScript by writing Airtable Apps (now called Extensions), I knew I needed a broader understanding of enterprise-grade software development tools and resources. Naturally, the next logical step was an advanced full-stack financial management application.
 
-First, run the development server:
+The design involved leveraging Microsoft Azure's deep-learning AI model for receipts (via their 'form-recognizer' API) and the Plaid API to automatically balance and categorize expenses by matching the user's account transactions with information inferred from user-uploaded receipt images.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+The back-end logic was originally implemented with Next.js API routes as part of this repo, but now lives in a separate repo: [alecvision/duewell-api-ts](https://github.com/alecvision/duewell-api-ts).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This application is still under semi-active development and will receive updates as time permits. The current goal is to re-implement the API using GraphQL, but it's a large undertaking and free time is scarce; this project may frequently be shelved in favor of more readily attainable goals.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Aside from showing me the extent of my naivety, the constant iterative experimentation provided invaluable experience with the following:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+ - Next.js
+ - Node.js
+ - Express.js
+ - Advanced Typescript
+ - Application Architecture
+ - User Auth/IAM
+   - Sessions
+   - Tokens
+   - RBAC
+ - Enterprise Libraries and APIs
+   - Azure Applied AI Services
+   - Plaid
+   - Auth0
+   - Grommet UI Library
+ - React
+   - Custom Hooks
+   - React Query
+   - State management
+   - useState
+   - useEffect
+   - useLayoutEffect
+   - useContext
+   - useReducer
+   - useCallback
+   - useMemo
+   
+**NOTE**: This was originally never meant for publication, so early commits may contain old secrets. They have since been rotated.
