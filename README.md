@@ -4,8 +4,6 @@ Though I had mastered JavaScript by writing Airtable Apps (now called Extensions
 
 The design involved leveraging Microsoft Azure's deep-learning AI model for receipts (via their 'form-recognizer' API) and the Plaid API to automatically balance and categorize expenses by matching the user's account transactions with information inferred from user-uploaded receipt images.
 
-The back-end logic was originally implemented with Next.js API routes as part of this repo, but now lives in a separate repo: [alecvision/duewell-api-ts](https://github.com/alecvision/duewell-api-ts).
-
 This application is still under semi-active development and will receive updates as time permits. The current goal is to re-implement the API using GraphQL, but it's a large undertaking and free time is scarce; this project may frequently be shelved in favor of more readily attainable goals.
 
 Aside from showing me the extent of my naivety, the constant iterative experimentation provided invaluable experience with the following:
