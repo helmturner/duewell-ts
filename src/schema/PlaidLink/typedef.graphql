@@ -1,0 +1,59 @@
+type Query {
+  items: [PlaidItem]!
+  transactions: [Transaction]!
+  balances(account: Account): [Balance]!
+}
+
+type Mutation {
+  createLinkItem(institution_id: String!, public_token: String!): PlaidItem!
+  refreshLinkItem(item_id: String!, status: String!): PlaidItem!
+  deleteLinkItem(item_id: String!): String!
+}
+
+type PlaidItem {
+  id: ID!
+  access_token: String!
+  institution_id: String!
+  item_id: String!
+  requrest_id: String!
+  status: String!
+  user_id: String!
+}
+
+type Transaction {
+  id: ID!
+  account: Account
+  accountOwner: String
+  amount: Float!
+  authorizedDate: String
+  category: [String]
+  categoryId: String
+  code: String
+  date: String!
+  isoCurrencyCode: String
+  name: String
+  merchantName: String
+  type: String
+  paymentChannel: String
+  pending: Boolean
+  pendingTransactionId: ID
+  unofficialCurrencyCode: String
+}
+
+type Balances {
+  available: Float
+  current: Float
+  isoCurrencyCode: String
+  limit: Float
+  unofficialCurrencyCode: String
+}
+
+type Account {
+  id: ID
+  mask: String
+  name: String
+  officialName: String
+  subtype: String
+  type: String
+  balances: Balances
+}
