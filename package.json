@@ -19,7 +19,7 @@
     "@auth0/nextjs-auth0": "^2.2.1",
     "apollo-server-micro": "^3.7.0",
     "graphql": "^16.5.0",
-    "graphql-config": "^4.3.0",
+    "graphql-config": "^4.5.0",
     "grommet": "^2.20.0",
     "grommet-icons": "^4.7.0",
     "lodash": "^4.17.21",
